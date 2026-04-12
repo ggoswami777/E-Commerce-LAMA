@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 
 const ShippingForm = ({setShippingForm}:{setShippingForm:(data:ShippingFormInputs)=>void}) => {
   const {register,handleSubmit,formState:{errors}}=useForm<ShippingFormInputs>({
-    resolver:zodResolver(shippingFormSchema),
+    resolver:zodResolver(shippingFormSchema as any),
   });
   const router=useRouter();
   const handleShippingForm:SubmitHandler<ShippingFormInputs>=(data)=>{
