@@ -54,7 +54,7 @@ export const columns: ColumnDef<Product>[] = [
           const product=row.original;
           return(
             <div className="w-9 h-9 relative">
-              <Image src={product.images[product.colors[0]]} alt={product.name} fill className="rounded-full  object-cover"/>
+              <Image src={product.images?.[product.colors[0]||""] || ""} alt={product.name} fill className="rounded-full  object-cover"/>
             </div>
           )
     
