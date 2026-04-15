@@ -6,6 +6,7 @@ import { Bell, Home, ShoppingCart } from 'lucide-react'
 import { ClerkProvider, Show, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
 
 import ShoppingCartIcon from './ShoppingCartIcon'
+import ProfileButton from './ProfileButton'
 
 const Navbar = () => {
   return (
@@ -31,7 +32,7 @@ const Navbar = () => {
               </SignUpButton>
             </Show>
             <Show when="signed-in">
-              <UserButton />
+              <ProfileButton/>
             </Show>
         </div>
     </div>
