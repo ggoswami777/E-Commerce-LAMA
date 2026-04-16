@@ -1,9 +1,19 @@
+import { clerkPlugin, getAuth } from '@clerk/fastify';
 import Fastify from 'fastify';
 
 const fastify = Fastify({
   logger: true
 });
+fastify.register(clerkPlugin);
+fastify.get('/test',(request,reply)=>{
+  const {userId}=getAuth(request);
+  if(!userId){
+    return reply.send({message:"You are not logged in"});
+  }
+  return reply.send({message:"Order service is authenticated!"});
 
+
+})
 fastify.get('/', async (request, reply) => {
   return { hello: 'order service' };
 });
