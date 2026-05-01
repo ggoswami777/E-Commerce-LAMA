@@ -5,7 +5,9 @@
     "devDependencies": {
         "@repo/typescript-config": "*"
     },
-    ".": "./src/index.ts",
+    "exports":{
+        ".": "./src/index.ts"
+    },
     "dependencies": {
         "mongoose": "^9.6.1"
     }

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@clerk/fastify": "^3.1.13",
-    "fastify": "^5.8.5"
+    "fastify": "^5.8.5",
+    "@repo/order-db":"*"
   }
 }
