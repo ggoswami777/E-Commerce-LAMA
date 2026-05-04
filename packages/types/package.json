@@ -4,7 +4,8 @@
     "main":"src/index.ts",
     "type":"module",
     "devDependencies": {
-        "@repo/typescript-config":"*"
+        "@repo/typescript-config":"*",
+        "@repo/product-db":"*"
     },
     "scripts":{
         "check-types":"tsc --noEmit"
