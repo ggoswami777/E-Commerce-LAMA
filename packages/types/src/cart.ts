@@ -1,22 +1,13 @@
+import type{Product} from "@repo/product-db"
 import z from "zod";
 
-export type ProductType={
-    id:string|number;
-    name:string;
-    shortDescription:string;
-    description:string;
-    price:number;
-    sizes:[string,...string[]];
-    colors:[string,...string[]];
-    images:Record<string,string>;
-}
-export type ProductsType=ProductType[];
-export type CartItemType=ProductType & {
+export type CartItemType=Product &{
     quantity:number;
     selectedSize:string;
     selectedColor:string;
 }
-export type CartItemsType=CartItemType[]
+
+export type CartItemsType=CartItemType[];
 export const shippingFormSchema=z.object({
     name:z.string().min(1,"Name is required"),
     email:z.string().email().min(1,"Email is required!"),
@@ -25,14 +16,7 @@ export const shippingFormSchema=z.object({
     city:z.string().min(1,"City is required!"),
 })
 export type ShippingFormInputs=z.infer<typeof shippingFormSchema>;
-export const paymentFormSchema=z.object({
-    cardHolder:z.string().min(1,"Card Holder is required"),
-    cardNumber:z.string().min(16,"Card number is required!").max(16,"Card number is required!"),
-    expirationDate:z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}s/,"Expiration date must be in MM/YY format !"),
-    cvv:z.string().min(3,"CVV is required!").max(3,"CVV is required!"),
-    
-})
-export type PaymentFormInputs=z.infer<typeof paymentFormSchema>;
+
 export type CartStoreStateType={
     cart:CartItemsType;
     hasHydrated:boolean;

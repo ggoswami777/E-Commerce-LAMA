@@ -1,5 +1,6 @@
 import type{Product,Category} from "@repo/product-db"
 export type ProductType=Product;
+export type productsType=ProductType[];
 export type StripeProductType={
     id:string;
     name:string;

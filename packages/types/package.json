@@ -1,19 +1,23 @@
 {
-    "name":"@repo/types",
-    "version":"0.0.1",
-    "main":"src/index.ts",
-    "type":"module",
+    "name": "@repo/types",
+    "version": "0.0.1",
+    "main": "src/index.ts",
+    "type": "module",
     "devDependencies": {
-        "@repo/typescript-config":"*",
-        "@repo/product-db":"*"
+        "@repo/product-db": "*",
+        "@repo/typescript-config": "*"
+        
     },
-    "scripts":{
-        "check-types":"tsc --noEmit"
+    "scripts": {
+        "check-types": "tsc --noEmit"
     },
-    "exports":{
-        ".":{
-            "import":"./src/index.ts",
-            "types":"./src/index.ts"
+    "exports": {
+        ".": {
+            "import": "./src/index.ts",
+            "types": "./src/index.ts"
         }
+    },
+    "dependencies": {
+        "zod": "^4.4.3"
     }
 }
