@@ -17,35 +17,35 @@ const ShippingForm = ({setShippingForm}:{setShippingForm:(data:ShippingFormInput
     <form className="flex flex-col gap-4 " onSubmit={handleSubmit(handleShippingForm)}>
       <div className="flex flex-col gap-1">
         <label className="text-xs text-gray font-medium " htmlFor="name">Name</label>
-        <input className="border-b border-gray-200 py-2 outline-none text-sm" type="text" id="name" placeholder="John Doe" {...register("name")} />
+        <input className="border-b border-gray-200 py-2 outline-none text-sm" value="jon doe" type="text" id="name" placeholder="John Doe" {...register("name")} />
         {errors.name && 
           <p className="text-xs text-red-500">{errors.name.message}</p>
         }
       </div>
       <div className="flex flex-col gap-1">
         <label className="text-xs text-gray font-medium " htmlFor="email">Email</label>
-        <input className="border-b border-gray-200 py-2 outline-none text-sm" type="email" id="email" placeholder="JohnDoe@gmail.com" {...register("email")} />
+        <input className="border-b border-gray-200 py-2 outline-none text-sm" type="email" value="JohnDoe@gmail.com" id="email" placeholder="JohnDoe@gmail.com" {...register("email")} />
         {errors.email && 
           <p className="text-xs text-red-500">{errors.email.message}</p>
         }
       </div>
       <div className="flex flex-col gap-1">
         <label className="text-xs text-gray font-medium " htmlFor="phone">Phone</label>
-        <input className="border-b border-gray-200 py-2 outline-none text-sm" type="text" id="phone" placeholder="987654321" {...register("phone")} />
+        <input className="border-b border-gray-200 py-2 outline-none text-sm" type="text" value="987654321" id="phone" placeholder="987654321" {...register("phone")} />
         {errors.phone && 
           <p className="text-xs text-red-500">{errors.phone.message}</p>
         }
       </div>
       <div className="flex flex-col gap-1">
         <label className="text-xs text-gray font-medium " htmlFor="address">Address</label>
-        <input className="border-b border-gray-200 py-2 outline-none text-sm" type="text" id="address" placeholder="Civil Lines,NEW DELHI" {...register("address")} />
+        <input className="border-b border-gray-200 py-2 outline-none text-sm" type="text" id="address" value="Civil Lines,NEW DELHI" placeholder="Civil Lines,NEW DELHI" {...register("address")} />
         {errors.address && 
           <p className="text-xs text-red-500">{errors.address.message}</p>
         }
       </div>
       <div className="flex flex-col gap-1">
         <label className="text-xs text-gray font-medium " htmlFor="city">City</label>
-        <input className="border-b border-gray-200 py-2 outline-none text-sm" type="text" id="city" placeholder="NEW DELHI" {...register("city")} />
+        <input className="border-b border-gray-200 py-2 outline-none text-sm" type="text" id="city" value="NEW DELHI" placeholder="NEW DELHI" {...register("city")} />
         {errors.city && 
           <p className="text-xs text-red-500">{errors.city.message}</p>
         }

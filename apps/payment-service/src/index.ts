@@ -1,14 +1,18 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import { clerkMiddleware, getAuth } from '@hono/clerk-auth'
-import { shouldBeUser } from './middleware/authMiddleware.js'
-import stripe from './utils/stripe.js'
+import { clerkMiddleware } from '@hono/clerk-auth'
 
+import sessionRoute from './routes/session.routes.js'
+import {cors} from "hono/cors"
 const app = new Hono()
 app.use('*', clerkMiddleware())
+app.use("*",cors({
+  origin:["http://localhost:3002"]
+}))
 app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
+app.route("/sessions",sessionRoute)
 // app.post('/create-stripe-product',async (c) => {
 //   const res=await stripe.products.create({
 //     id:"123",
