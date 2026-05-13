@@ -6,6 +6,7 @@ import sessionRoute from './routes/session.routes.js'
 import {cors} from "hono/cors"
 import webhookRoute from './routes/webhooks.route.js'
 import stripe from './utils/stripe.js'
+import { consumer, producer } from './utils/kafka.js'
 const app = new Hono()
 app.use("*",cors({
   origin:["http://localhost:3002"],
@@ -41,6 +42,7 @@ const port = process.env.PORT ? parseInt(process.env.PORT) : 8002;
 
 const start=async()=>{
   try {
+    Promise.all([await producer.connect(),await consumer.connect()])
     serve({
   fetch: app.fetch,
   port: port
