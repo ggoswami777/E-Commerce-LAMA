@@ -63,7 +63,7 @@ services:
       - kafka-network
 
   kafka-ui:
-    image: provectuslabs/kafka-ui:latest   # still free on Docker Hub
+    image: provectuslabs/kafka-ui:latest  
     container_name: kafka-ui
     environment:
       KAFKA_CLUSTERS_0_NAME: local-cluster
