@@ -24,9 +24,17 @@ export const shouldBeAdmin = (req: Request, res: Response, next: NextFunction) =
     if (!userId) {
         return res.status(401).json({ message: "You are not logged in" });
     }
-    const claims=auth.sessionClaims as CustomJwtSessionClaims
-    if(claims.metadata?.role!=="admin"){
-        return res.status(403).send({message:"Unauthorized!"})
+    const claims = auth.sessionClaims as any;
+    console.log("Auth User ID:", userId);
+    console.log("Session Claims:", JSON.stringify(claims, null, 2));
+
+    const role = claims.metadata?.role || claims.role;
+
+    if (role !== "admin") {
+        return res.status(403).send({ 
+            message: "Unauthorized! Admin role required.",
+            detectedRole: role || "none"
+        });
     }
     req.userId = userId;
     return next();

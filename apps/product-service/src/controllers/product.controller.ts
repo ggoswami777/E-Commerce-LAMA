@@ -1,5 +1,7 @@
 import { prisma, Prisma } from "@repo/product-db";
 import {Request,Response} from "express"
+import { producer } from "../utils/kafka";
+import { StripeProductType } from "@repo/types";
 export const createProduct=async(req:Request,res:Response)=>{
     const data:Prisma.ProductCreateInput=req.body;
     const{colors,images}=data;
@@ -15,7 +17,16 @@ export const createProduct=async(req:Request,res:Response)=>{
     if(missingColors.length>0){
         return res.status(400).json({message:"Missing images for colors!",missingColors})
     }
-    const product=await prisma.product.create({data});
+    if (data.price) {
+        data.price = Math.round(data.price);
+    }
+    const product = await prisma.product.create({ data });
+    const stripeProduct:StripeProductType={
+        id:product.id.toString(),
+        name:product.name,
+        price:product.price
+    }
+    producer.send("product.created",{value:stripeProduct})
     res.status(201).json(product);
 
 }
@@ -35,6 +46,7 @@ export const deleteProduct=async(req:Request,res:Response)=>{
         where:{id:Number(id)},
         
     })
+    producer.send("product.deleted",{value:Number(id)})
     return res.status(200).json(deletedProduct)
 }
 export const getProducts=async(req:Request,res:Response)=>{
@@ -71,11 +83,21 @@ export const getProducts=async(req:Request,res:Response)=>{
     });
     res.status(200).json(products);
 }
-export const getProduct=async(req:Request,res:Response)=>{
-    const {id}=req.params;
-    const product=await prisma.product.findUnique({
-        where:{id:Number(id)}
-    })
-    return res.status(200).json(product)
+export const getProduct = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const numericId = Number(id);
 
+    if (isNaN(numericId)) {
+        return res.status(400).json({ message: "Invalid product ID format" });
+    }
+
+    const product = await prisma.product.findUnique({
+        where: { id: numericId }
+    })
+
+    if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+    }
+
+    return res.status(200).json(product);
 }
