@@ -5,6 +5,7 @@
     "type": "module",
     "devDependencies": {
         "@repo/product-db": "*",
+        "@repo/order-db": "*",
         "@repo/typescript-config": "*"
         
     },
