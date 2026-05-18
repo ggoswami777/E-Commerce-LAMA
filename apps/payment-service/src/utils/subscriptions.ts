@@ -2,7 +2,7 @@ import { consumer } from "./kafka"
 import { createStripeProduct, deleteStripeProduct } from "./stripeProduct";
 
 export const runKafkaSubscription=async()=>{
-    // Subscribe to topics matching the producer's naming convention
+ 
     consumer.subscribe("product.created",async(message)=>{
         const product=message.value;
         console.log("Received message: product-created",product);
