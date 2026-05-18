@@ -1,7 +1,8 @@
-import {Kafka} from "kafkajs"
-export const createKafkaClient=(service:string)=>{
+import { Kafka, logLevel } from "kafkajs";
+export const createKafkaClient = (service: string) => {
     return new Kafka({
-        clientId:service,
-        brokers:["localhost:9094","localhost:9095","localhost:9096"]
+        clientId: service,
+        brokers: ["localhost:9094", "localhost:9095", "localhost:9096"],
+        logLevel: logLevel.ERROR,
     })
 }

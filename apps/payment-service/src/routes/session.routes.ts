@@ -27,6 +27,7 @@ sessionRoute.post('/create-checkout-session', shouldBeUser, async (c) => {
 
         const session = await stripe.checkout.sessions.create({
             ui_mode: 'embedded_page' as any,
+            client_reference_id: c.get("userId") as string,
             line_items,
             mode: 'payment',
             shipping_address_collection: {

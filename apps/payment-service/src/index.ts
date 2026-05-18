@@ -15,7 +15,7 @@ app.use("*",cors({
   allowMethods: ["POST", "GET", "OPTIONS"],
   credentials: true,
 }))
-app.use('*', clerkMiddleware())
+app.use('/sessions/*', clerkMiddleware())
 app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
