@@ -141,10 +141,33 @@ import  Filter  from './Filter';
 //   },
 // ];
 const fetchData=async({category,sort,search,params}:{category?:string,sort?:string,search?:string,params:"homepage"|"products"})=>{
-  
-  const res=await fetch(`${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/products?${category?`category=${category}` : ""}${search?`&search=${search}` : ""}&sort=${sort ||"newest"}${params==="homepage"?"&limit=8":""}`);
-  const data:ProductType[]=await res.json();
-  return data;
+  try {
+    const queryParams = new URLSearchParams();
+    
+    if (category) queryParams.append('category', category);
+    if (search) queryParams.append('search', search);
+    queryParams.append('sort', sort || 'newest');
+    if (params === 'homepage') queryParams.append('limit', '8');
+    
+    const url = `${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/products?${queryParams.toString()}`;
+    
+    const res = await fetch(url, { 
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store'
+    });
+    
+    if (!res.ok) {
+      console.error(`Failed to fetch products: ${res.status} ${res.statusText}`);
+      return [];
+    }
+    
+    const data: ProductType[] = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return [];
+  }
 }
 const ProductList = async({category,sort,search,params}:{category:string,sort?:string,search?:string,params:"homepage"| "products"}) =>
   
