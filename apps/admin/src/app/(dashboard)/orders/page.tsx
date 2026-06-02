@@ -11,7 +11,13 @@ const getData = async (): Promise<OrderType[]> => {
         Authorization:`Bearer ${token}`
       }
     })
+    if (!res.ok) {
+      throw new Error(`Failed to fetch orders: ${res.statusText}`);
+    }
     const data=await res.json();
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid response format: data is not an array");
+    }
     return data;
   }catch(error){
     console.error(error);
@@ -26,7 +32,7 @@ const OrdersPage = async () => {
       <div className="mb-8 px-4 py-2 bg-secondary rounded-md">
         <h1 className="font-semibold">All Payments</h1>
       </div>
-      <DataTable columns={columns} data={data}/>
+      <DataTable columns={columns} data={data || []}/>
     </div>
   );
 };
