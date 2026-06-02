@@ -11,18 +11,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { User } from "@clerk/nextjs/server";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Row } from "react-day-picker";
 
-export type User = {
-  id: string;
-  avatar: string;
-  fullName: string;
-  email: string;
-  status: "active" | "inactive" | "pending";
-};
+// export type User = {
+//   id: string;
+//   avatar: string;
+//   fullName: string;
+//   email: string;
+//   status: "active" | "inactive" | "pending";
+// };
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -50,15 +52,19 @@ export const columns: ColumnDef<User>[] = [
       const user=row.original;
       return(
         <div className="w-9 h-9 relative">
-          <Image src={user.avatar} alt={user.fullName} fill className="rounded-full  object-cover"/>
+          <Image src={user.imageUrl} alt={user.firstName || user.username || "-"} fill className="rounded-full  object-cover"/>
         </div>
       )
 
     }
   },
   {
-    accessorKey: "fullName",
+    accessorKey: "firstName",
     header: "User",
+    cell:({row})=>{
+      const user=row.original
+      return <div className="">{user.firstName || user.username || "-"}</div>
+    }
   },
   {
     accessorKey: "email",
@@ -73,20 +79,24 @@ export const columns: ColumnDef<User>[] = [
         </Button>
       );
     },
+    cell:({row})=>{
+      const user=row.original
+      return <div className="">{user.emailAddresses[0]?.emailAddress}</div>
+    }
   },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = row.getValue("status");
+      const user=row.original
+      const status=user.banned?"banned":"active"
 
       return (
         <div
           className={cn(
             `p-1 rounded-md w-max text-xs capitalize`,
-            status === "pending" && "bg-yellow-500/40 text-yellow-700",
             status === "active" && "bg-green-500/40 text-green-700",
-            status === "inactive" && "bg-red-500/40 text-red-700"
+            status === "banned" && "bg-red-500/40 text-red-700"
           )}
         >
           {status as string}
