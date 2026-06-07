@@ -70,12 +70,12 @@ const AddUser = () => {
       }
     })
   return (
-    <SheetContent>
+    <SheetContent className="overflow-y-auto max-h-screen">
       <SheetHeader>
         <SheetTitle className="mb-4">Add User</SheetTitle>
         <SheetDescription asChild>
           <Form {...form} >
-            <form className="space-y-8" onSubmit={form.handleSubmit(data=>mutation.mutate(data))}>
+            <form className="space-y-6 pb-6" onSubmit={form.handleSubmit(data=>mutation.mutate(data))}>
               <FormField
                 control={form.control}
                 name="firstName"
@@ -160,7 +160,7 @@ const AddUser = () => {
                 )}
               />
               
-              <Button type="submit" disabled={mutation.isPending} className="disabled:opacity-50 disabled:cursor-not-allowed" onClick={()=>{form.handleSubmit((data)=>mutation.mutate(data))}}>Submit</Button>
+              <Button type="submit" disabled={mutation.isPending} className="w-full disabled:opacity-50 disabled:cursor-not-allowed">Submit</Button>
             </form>
           </Form>
         </SheetDescription>
