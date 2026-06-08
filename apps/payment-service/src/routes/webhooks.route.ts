@@ -12,7 +12,7 @@ webhookRoute.post("/stripe", async (c) => {
     const sig = c.req.header("stripe-signature");
 
     if (!sig || !webhookSecret) {
-        console.error("Missing stripe-signature or webhook secret");
+      
         return c.json({ error: "Webhook signature or secret missing" }, 400);
     }
 
@@ -21,11 +21,11 @@ webhookRoute.post("/stripe", async (c) => {
     try {
         event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
     } catch (err: any) {
-        console.error(`Webhook signature verification failed: ${err.message}`);
+     
         return c.json({ error: `Webhook Error: ${err.message}` }, 400);
     }
 
-    console.log(`Received webhook event: ${event.type}`);
+   
 
     try {
         switch (event.type) {
@@ -39,10 +39,8 @@ webhookRoute.post("/stripe", async (c) => {
 
                 console.log("[WEBHOOK] Checkout session completed:", sessionWithLineItems.id);
                 console.log("[WEBHOOK] Customer email:", session.customer_details?.email);
-                console.log("[WEBHOOK] Payment status:", session.payment_status);
-                
+                 
                 // TODO: Trigger order creation (Kafka, database, etc.)
-              console.log("[WEBHOOK] Sending payment.successful message to Kafka...");
               await producer.send("payment.successful", {
                 value: {
                     userId: session.client_reference_id,
@@ -61,7 +59,7 @@ webhookRoute.post("/stripe", async (c) => {
                     })) || [],
                 }
               });
-              console.log("[WEBHOOK] Kafka message sent successfully");
+
 
             case "checkout.session.expired":
                 const expiredSession = event.data.object as Stripe.Checkout.Session;
