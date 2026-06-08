@@ -20,10 +20,13 @@ fastify.register(orderRoute);
 
 const start = async () => {
   try {
-    Promise.all([await connectOrderDB(),await producer.connect(),await consumer.connect()])
+    console.log('[ORDER-SERVICE] Starting initialization...');
+    await Promise.all([connectOrderDB(), producer.connect(), consumer.connect()]);
+    console.log('[ORDER-SERVICE] DB and Kafka connections established');
     await runKafkaSubscription();
+    console.log('[ORDER-SERVICE] Kafka subscription running');
     await fastify.listen({ port: 8001, host: '0.0.0.0' });
-    console.log('Order service is running on http://localhost:8001');
+    console.log('[ORDER-SERVICE] Server is running on http://localhost:8001');
   } catch (err) {
     console.log(err);
     process.exit(1);

@@ -37,10 +37,12 @@ webhookRoute.post("/stripe", async (c) => {
                     expand: ["line_items"],
                 });
 
-                console.log("Checkout session completed:", sessionWithLineItems.id);
-                console.log("Customer email:", session.customer_details?.email);
+                console.log("[WEBHOOK] Checkout session completed:", sessionWithLineItems.id);
+                console.log("[WEBHOOK] Customer email:", session.customer_details?.email);
+                console.log("[WEBHOOK] Payment status:", session.payment_status);
                 
                 // TODO: Trigger order creation (Kafka, database, etc.)
+              console.log("[WEBHOOK] Sending payment.successful message to Kafka...");
               await producer.send("payment.successful", {
                 value: {
                     userId: session.client_reference_id,
@@ -59,8 +61,7 @@ webhookRoute.post("/stripe", async (c) => {
                     })) || [],
                 }
               });
-
-                break;
+              console.log("[WEBHOOK] Kafka message sent successfully");
 
             case "checkout.session.expired":
                 const expiredSession = event.data.object as Stripe.Checkout.Session;

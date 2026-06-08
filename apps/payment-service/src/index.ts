@@ -10,7 +10,7 @@ import { consumer, producer } from './utils/kafka.js'
 import { runKafkaSubscription } from './utils/subscriptions.js'
 const app = new Hono()
 app.use("*",cors({
-  origin:["http://localhost:3002"],
+  origin:["http://localhost:3002", "http://127.0.0.1:3002"],
   allowHeaders: ["Content-Type", "Authorization"],
   allowMethods: ["POST", "GET", "OPTIONS"],
   credentials: true,
