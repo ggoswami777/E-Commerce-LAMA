@@ -7,10 +7,13 @@ import { auth } from "@clerk/nextjs/server";
 
 async function safeFetch(url: string, options?: RequestInit): Promise<Response | null> {
   try {
-    const res = await fetch(url, { ...options, cache: "no-store" });
+    const res = await fetch(url, { ...options, cache: "no-store" }).catch((err) => {
+      console.warn(`[safeFetch] Connection refused/error for ${url}:`, err.message);
+      return null;
+    });
     return res;
   } catch (error) {
-    console.error(`[safeFetch] Network error for ${url}:`, error);
+    console.error(`[safeFetch] Unexpected fetch error for ${url}:`, error);
     return null;
   }
 }
