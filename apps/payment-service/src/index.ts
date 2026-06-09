@@ -43,7 +43,7 @@ const port = process.env.PORT ? parseInt(process.env.PORT) : 8002;
 
 const start=async()=>{
   try {
-    Promise.all([await producer.connect(),await consumer.connect()])
+    await Promise.all([producer.connect(),consumer.connect()])
     await runKafkaSubscription();
     serve({
   fetch: app.fetch,

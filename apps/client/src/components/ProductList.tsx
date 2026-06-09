@@ -141,33 +141,46 @@ import  Filter  from './Filter';
 //   },
 // ];
 const fetchData=async({category,sort,search,params}:{category?:string,sort?:string,search?:string,params:"homepage"|"products"})=>{
-  try {
-    const queryParams = new URLSearchParams();
-    
-    if (category) queryParams.append('category', category);
-    if (search) queryParams.append('search', search);
-    queryParams.append('sort', sort || 'newest');
-    if (params === 'homepage') queryParams.append('limit', '8');
-    
-    const url = `${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/products?${queryParams.toString()}`;
-    
-    const res = await fetch(url, { 
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      cache: 'no-store'
-    });
-    
-    if (!res.ok) {
-      console.error(`Failed to fetch products: ${res.status} ${res.statusText}`);
-      return [];
+  const maxRetries = 3;
+  const retryDelay = 1000; // 1 second
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const queryParams = new URLSearchParams();
+      
+      if (category) queryParams.append('category', category);
+      if (search) queryParams.append('search', search);
+      queryParams.append('sort', sort || 'newest');
+      if (params === 'homepage') queryParams.append('limit', '8');
+      
+      const url = `${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/products?${queryParams.toString()}`;
+      
+      const res = await fetch(url, { 
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        cache: 'no-store'
+      });
+      
+      if (!res.ok) {
+        console.error(`Failed to fetch products: ${res.status} ${res.statusText}`);
+        return [];
+      }
+      
+      const data: ProductType[] = await res.json();
+      return data;
+    } catch (error) {
+      console.error(`Error fetching products (attempt ${attempt}/${maxRetries}):`, error);
+      
+      // Only retry on network errors, not on last attempt
+      if (attempt < maxRetries) {
+        await new Promise(resolve => setTimeout(resolve, retryDelay));
+        continue;
+      }
     }
-    
-    const data: ProductType[] = await res.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    return [];
   }
+  
+  console.error('Failed to fetch products after all retries');
+  return [];
 }
 const ProductList = async({category,sort,search,params}:{category:string,sort?:string,search?:string,params:"homepage"| "products"}) =>
   
